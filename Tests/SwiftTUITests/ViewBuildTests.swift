@@ -49,7 +49,7 @@ struct ViewBuildTests {
   }
 
   private func buildView<V: View>(_ view: V) throws -> Control {
-    let node = ViewNode(view: VStack(content: view))
+    let node = Node(view: VStack(content: view))
     node.build()
     return try #require(node.control?.children.first)
   }

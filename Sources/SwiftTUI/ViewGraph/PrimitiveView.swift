@@ -16,52 +16,52 @@ import Foundation
 ///   load the controls lazily. Those primitive views additionally conform to the `LayoutRootView`
 ///   protocol.
 protocol PrimitiveView: View where Body == Never {
-    func buildNode(_ node: ViewNode<Self>)
-    func updateNode(_ node: ViewNode<Self>)
-    static var size: Int? { get }
+  func buildNode(_ node: Node<Self>)
+  func updateNode(_ node: Node<Self>)
+  static var size: Int? { get }
 }
 
 extension PrimitiveView {
-    public var body: Never { fatalError("Cannot evaluate `\(Self.self).body` of type Never") }
+  public var body: Never { fatalError("Cannot evaluate `\(Self.self).body` of type Never") }
 }
 
 extension View {
-    static var size: Int? {
-        if let I = Self.self as? (any PrimitiveView.Type) {
-            return I.size
-        }
-        return Body.size
+  static var size: Int? {
+    if let I = Self.self as? (any PrimitiveView.Type) {
+      return I.size
     }
+    return Body.size
+  }
 }
 
 extension View {
-    func buildNode(_ node: ViewNode<Self>) {
-        if let primitive = self as? (any PrimitiveView) {
-            func _buildNode<T: PrimitiveView>(_ view: T) {
-                view.buildNode(unsafeDowncast(node, to: ViewNode<T>.self))
-            }
-           _buildNode(primitive)
-        } else {
-            self.setupStateProperties(node: node)
-            self.setupEnvironmentProperties(node: node)
-            #if os(macOS)
-            self.setupObservedObjectProperties(node: node)
-            #endif
-            node.addNode(at: 0, ViewNode(view: self.body))
-        }
+  func buildNode(_ node: Node<Self>) {
+    if let primitive = self as? (any PrimitiveView) {
+      func _buildNode<T: PrimitiveView>(_ view: T) {
+        view.buildNode(unsafeDowncast(node, to: Node<T>.self))
+      }
+      _buildNode(primitive)
+    } else {
+      self.setupStateProperties(node: node)
+      self.setupEnvironmentProperties(node: node)
+      #if os(macOS)
+        self.setupObservedObjectProperties(node: node)
+      #endif
+      node.addNode(at: 0, Node(view: self.body))
     }
+  }
 
-    func updateNode(_ node: ViewNode<Self>) {
-        if let primitive = self as? (any PrimitiveView) {
-            func _updateNode<T: PrimitiveView>(_ view: T) {
-                view.updateNode(unsafeDowncast(node, to: ViewNode<T>.self))
-            }
-           _updateNode(primitive) 
-        } else {
-            self.setupStateProperties(node: node)
-            self.setupEnvironmentProperties(node: node)
-            node.view = self
-            node.children[0].update(using: self.body)
-        }
+  func updateNode(_ node: Node<Self>) {
+    if let primitive = self as? (any PrimitiveView) {
+      func _updateNode<T: PrimitiveView>(_ view: T) {
+        view.updateNode(unsafeDowncast(node, to: Node<T>.self))
+      }
+      _updateNode(primitive)
+    } else {
+      self.setupStateProperties(node: node)
+      self.setupEnvironmentProperties(node: node)
+      node.view = self
+      node.children[0].update(using: self.body)
     }
+  }
 }

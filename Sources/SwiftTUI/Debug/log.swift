@@ -8,23 +8,22 @@ import Foundation
 /// tail -f /tmp/swift_tui_log
 /// ```
 public func log(_ item: Any, terminator: String = "\n") {
-    print(item, terminator: terminator, to: &logStream)
+  print(item, terminator: terminator, to: &logStream)
 }
 
 nonisolated(unsafe) var logStream = LogStream()
 
 struct LogStream: TextOutputStream {
-    func write(_ string: String) {
-        let logURL = URL(fileURLWithPath: "/tmp/swift_tui_log")
-        guard let data = string.data(using: .utf8) else {
-            assertionFailure("Cannot write to log")
-            return
-        }
-        if let fileHandle = try? FileHandle(forWritingTo: logURL) {
-            fileHandle.seekToEndOfFile()
-            fileHandle.write(data)
-            fileHandle.closeFile()
-        }
+  func write(_ string: String) {
+    let logURL = URL(fileURLWithPath: "/tmp/swift_tui_log")
+    guard let data = string.data(using: .utf8) else {
+      assertionFailure("Cannot write to log")
+      return
     }
+    if let fileHandle = try? FileHandle(forWritingTo: logURL) {
+      fileHandle.seekToEndOfFile()
+      fileHandle.write(data)
+      fileHandle.closeFile()
+    }
+  }
 }
-

@@ -1,34 +1,34 @@
 import Foundation
 
 extension Optional: View, PrimitiveView, OptionalView where Wrapped: View {
-    public typealias Body = Never
+  public typealias Body = Never
 
-    static var size: Int? {
-        if Wrapped.size == 0 { return 0 }
-        return nil
-    }
+  static var size: Int? {
+    if Wrapped.size == 0 { return 0 }
+    return nil
+  }
 
-    func buildNode(_ node: ViewNode<Self>) {
-        if let view = self {
-            node.addNode(at: 0, ViewNode(view: view))
-        }
+  func buildNode(_ node: Node<Self>) {
+    if let view = self {
+      node.addNode(at: 0, Node(view: view))
     }
+  }
 
-    func updateNode(_ node: ViewNode<Self>) {
-        let last = node.view
-        node.view = self
-        switch (last, self) {
-        case (.none, .none):
-            break
-        case (.none, .some(let newValue)):
-            node.addNode(at: 0, ViewNode(view: newValue))
-        case (.some, .none):
-            node.removeNode(at: 0)
-        case (.some, .some(let newValue)):
-        break
-            node.children[0].update(using: newValue)
-        }
+  func updateNode(_ node: Node<Self>) {
+    let last = node.view
+    node.view = self
+    switch (last, self) {
+    case (.none, .none):
+      break
+    case (.none, .some(let newValue)):
+      node.addNode(at: 0, Node(view: newValue))
+    case (.some, .none):
+      node.removeNode(at: 0)
+    case (.some, .some(let newValue)):
+      break
+      node.children[0].update(using: newValue)
     }
+  }
 }
 
 /// We can use this non-generic protocol to check if a view is optional or not.

@@ -1,5 +1,5 @@
 extension View {
-  func setupDynamicProperties(node: ViewNode<Self>) {
+  func setupDynamicProperties(node: Node<Self>) {
 
   }
 }
