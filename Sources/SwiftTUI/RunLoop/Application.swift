@@ -190,8 +190,8 @@ public class Application: @unchecked Sendable {
   public func changeWindowsSize(to size: Size) {
     window.layer.frame.size = size
     renderer.setCache()
-    control.layer.invalidate()
-    update()
+    // control.layer.invalidate()
+    // update()
   }
 
   private func handleWindowSizeChange() {
