@@ -9,13 +9,13 @@ public struct Group<Content: View>: View, PrimitiveView {
 
     static var size: Int? { Content.size }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.view)
+        node.children[0].update(using: content)
     }
 
 }

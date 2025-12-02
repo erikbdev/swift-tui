@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-public struct State<T>: AnyState {
+public struct State<T>: AnyState, DynamicProperty, PrimitiveDynamicProperty {
     public let initialValue: T
 
     public init(initialValue: T) {
@@ -56,6 +56,6 @@ protocol AnyState {
 }
 
 class StateReference {
-    weak var node: Node?
+    weak var node: AnyViewNode?
     var label: String?
 }

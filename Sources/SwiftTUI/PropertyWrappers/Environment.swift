@@ -14,7 +14,7 @@ public struct EnvironmentValues {
 }
 
 @propertyWrapper
-public struct Environment<T>: AnyEnvironment {
+public struct Environment<T>: AnyEnvironment, DynamicProperty, PrimitiveDynamicProperty {
     let keyPath: KeyPath<EnvironmentValues, T>
 
     public init(_ keyPath: KeyPath<EnvironmentValues, T>) {
@@ -35,7 +35,7 @@ public struct Environment<T>: AnyEnvironment {
         set {}
     }
 
-    private func makeEnvironment(node: Node, transform: (inout EnvironmentValues) -> Void) -> EnvironmentValues {
+    private func makeEnvironment(node: AnyViewNode, transform: (inout EnvironmentValues) -> Void) -> EnvironmentValues {
         if let parent = node.parent {
             return makeEnvironment(node: parent) {
                 node.environment?(&$0)
@@ -54,5 +54,5 @@ protocol AnyEnvironment {
 }
 
 class EnvironmentReference {
-    weak var node: Node?
+    weak var node: AnyViewNode?
 }

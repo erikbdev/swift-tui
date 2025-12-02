@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-public struct Binding<T> {
+public struct Binding<T>: DynamicProperty, PrimitiveDynamicProperty {
     let get: () -> T
     let set: (T) -> Void
 

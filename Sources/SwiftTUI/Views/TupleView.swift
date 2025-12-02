@@ -12,17 +12,16 @@ public struct TupleView2<C0: View, C1: View>: View, PrimitiveView {
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
     }
-
 }
 
 public struct TupleView3<C0: View, C1: View, C2: View>: View, PrimitiveView {
@@ -38,19 +37,18 @@ public struct TupleView3<C0: View, C1: View, C2: View>: View, PrimitiveView {
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
     }
-
 }
 
 public struct TupleView4<C0: View, C1: View, C2: View, C3: View>: View, PrimitiveView {
@@ -67,21 +65,20 @@ public struct TupleView4<C0: View, C1: View, C2: View, C3: View>: View, Primitiv
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
     }
-
 }
 
 public struct TupleView5<C0: View, C1: View, C2: View, C3: View, C4: View>: View, PrimitiveView {
@@ -99,23 +96,22 @@ public struct TupleView5<C0: View, C1: View, C2: View, C3: View, C4: View>: View
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
     }
-
 }
 
 public struct TupleView6<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View>: View, PrimitiveView {
@@ -134,25 +130,24 @@ public struct TupleView6<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
-        node.addNode(at: 5, Node(view: content.5.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
+        node.addNode(at: 5, ViewNode(view: content.5))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
-        node.children[5].update(using: content.5.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
+        node.children[5].update(using: content.5)
     }
-
 }
 
 public struct TupleView7<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View>: View, PrimitiveView {
@@ -172,27 +167,26 @@ public struct TupleView7<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
-        node.addNode(at: 5, Node(view: content.5.view))
-        node.addNode(at: 6, Node(view: content.6.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
+        node.addNode(at: 5, ViewNode(view: content.5))
+        node.addNode(at: 6, ViewNode(view: content.6))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
-        node.children[5].update(using: content.5.view)
-        node.children[6].update(using: content.6.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
+        node.children[5].update(using: content.5)
+        node.children[6].update(using: content.6)
     }
-
 }
 
 public struct TupleView8<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View>: View, PrimitiveView {
@@ -213,29 +207,28 @@ public struct TupleView8<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
-        node.addNode(at: 5, Node(view: content.5.view))
-        node.addNode(at: 6, Node(view: content.6.view))
-        node.addNode(at: 7, Node(view: content.7.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
+        node.addNode(at: 5, ViewNode(view: content.5))
+        node.addNode(at: 6, ViewNode(view: content.6))
+        node.addNode(at: 7, ViewNode(view: content.7))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
-        node.children[5].update(using: content.5.view)
-        node.children[6].update(using: content.6.view)
-        node.children[7].update(using: content.7.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
+        node.children[5].update(using: content.5)
+        node.children[6].update(using: content.6)
+        node.children[7].update(using: content.7)
     }
-
 }
 
 public struct TupleView9<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View>: View, PrimitiveView {
@@ -257,31 +250,30 @@ public struct TupleView9<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
-        node.addNode(at: 5, Node(view: content.5.view))
-        node.addNode(at: 6, Node(view: content.6.view))
-        node.addNode(at: 7, Node(view: content.7.view))
-        node.addNode(at: 8, Node(view: content.8.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
+        node.addNode(at: 5, ViewNode(view: content.5))
+        node.addNode(at: 6, ViewNode(view: content.6))
+        node.addNode(at: 7, ViewNode(view: content.7))
+        node.addNode(at: 8, ViewNode(view: content.8))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
-        node.children[5].update(using: content.5.view)
-        node.children[6].update(using: content.6.view)
-        node.children[7].update(using: content.7.view)
-        node.children[8].update(using: content.8.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
+        node.children[5].update(using: content.5)
+        node.children[6].update(using: content.6)
+        node.children[7].update(using: content.7)
+        node.children[8].update(using: content.8)
     }
-
 }
 
 public struct TupleView10<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View, C9: View>: View, PrimitiveView {
@@ -304,31 +296,30 @@ public struct TupleView10<C0: View, C1: View, C2: View, C3: View, C4: View, C5: 
         return nil
     }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.0.view))
-        node.addNode(at: 1, Node(view: content.1.view))
-        node.addNode(at: 2, Node(view: content.2.view))
-        node.addNode(at: 3, Node(view: content.3.view))
-        node.addNode(at: 4, Node(view: content.4.view))
-        node.addNode(at: 5, Node(view: content.5.view))
-        node.addNode(at: 6, Node(view: content.6.view))
-        node.addNode(at: 7, Node(view: content.7.view))
-        node.addNode(at: 8, Node(view: content.8.view))
-        node.addNode(at: 9, Node(view: content.9.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content.0))
+        node.addNode(at: 1, ViewNode(view: content.1))
+        node.addNode(at: 2, ViewNode(view: content.2))
+        node.addNode(at: 3, ViewNode(view: content.3))
+        node.addNode(at: 4, ViewNode(view: content.4))
+        node.addNode(at: 5, ViewNode(view: content.5))
+        node.addNode(at: 6, ViewNode(view: content.6))
+        node.addNode(at: 7, ViewNode(view: content.7))
+        node.addNode(at: 8, ViewNode(view: content.8))
+        node.addNode(at: 9, ViewNode(view: content.9))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.0.view)
-        node.children[1].update(using: content.1.view)
-        node.children[2].update(using: content.2.view)
-        node.children[3].update(using: content.3.view)
-        node.children[4].update(using: content.4.view)
-        node.children[5].update(using: content.5.view)
-        node.children[6].update(using: content.6.view)
-        node.children[7].update(using: content.7.view)
-        node.children[8].update(using: content.8.view)
-        node.children[9].update(using: content.9.view)
+        node.children[0].update(using: content.0)
+        node.children[1].update(using: content.1)
+        node.children[2].update(using: content.2)
+        node.children[3].update(using: content.3)
+        node.children[4].update(using: content.4)
+        node.children[5].update(using: content.5)
+        node.children[6].update(using: content.6)
+        node.children[7].update(using: content.7)
+        node.children[8].update(using: content.8)
+        node.children[9].update(using: content.9)
     }
-
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-extension Node {
+extension ViewNode {
     /// Log the tree underneath the current node.
     /// ```
     /// → ContentView
@@ -11,11 +11,22 @@ extension Node {
         logTree(level: 0)
     }
 
-    private func logTree(level: Int) {
+    fileprivate func logTree(level: Int) {
         let indent = Array(repeating: " ", count: level * 2).joined()
         log("\(indent)→ \(type(of: self.view))")
         for child in children {
-            child.logTree(level: level + 1)
+            if let child = child as? (any _NodeLogging) {
+                child.logTree(level: level + 1)
+            }
         }
     }
+}
+
+private protocol _NodeLogging {
+    associatedtype T
+
+    func logTree(level: Int)
+}
+
+extension ViewNode: _NodeLogging {
 }

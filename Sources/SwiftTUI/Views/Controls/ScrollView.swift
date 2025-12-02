@@ -11,17 +11,17 @@ public struct ScrollView<Content: View>: View, PrimitiveView {
 
     static var size: Int? { 1 }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content))
         let control = ScrollControl()
         control.contentControl = node.children[0].control(at: 0)
         control.addSubview(control.contentControl, at: 0)
         node.control = control
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.view)
+        node.children[0].update(using: content)
     }
 
     private class ScrollControl: Control {

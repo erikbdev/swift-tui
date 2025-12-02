@@ -7,12 +7,12 @@ public struct Spacer: View, PrimitiveView {
     
     static var size: Int? { 1 }
     
-    func buildNode(_ node: Node) {
+    func buildNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.control = SpacerControl(orientation: stackOrientation)
     }
     
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.view = self
         let control = node.control as! SpacerControl

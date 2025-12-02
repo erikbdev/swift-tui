@@ -21,14 +21,14 @@ private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
 
     static var size: Int? { Content.size }
     
-    func buildNode(_ node: Node) {
+    func buildNode(_ node: ViewNode<Self>) {
         node.controls = WeakSet<Control>()
-        node.addNode(at: 0, Node(view: content.view))
+        node.addNode(at: 0, ViewNode(view: content))
     }
     
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.view)
+        node.children[0].update(using: content)
         for control in node.controls?.values ?? [] {
             let control = control as! PaddingControl
             control.edges = edges
@@ -36,7 +36,7 @@ private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
         }
     }
     
-    func passControl(_ control: Control, node: Node) -> Control {
+    func passControl(_ control: Control, node: ViewNode<Self>) -> Control {
         if let paddingControl = control.parent { return paddingControl }
         let paddingControl = PaddingControl(edges: edges, length: length)
         paddingControl.addSubview(control, at: 0)

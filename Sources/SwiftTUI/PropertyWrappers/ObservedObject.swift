@@ -3,7 +3,7 @@ import Foundation
 import Combine
 
 @propertyWrapper
-public struct ObservedObject<T: ObservableObject>: AnyObservedObject {
+public struct ObservedObject<T: ObservableObject>: AnyObservedObject, DynamicProperty, PrimitiveDynamicProperty {
     public let initialValue: T
 
     public init(initialValue: T) {

@@ -13,12 +13,12 @@ public struct TextField: View, PrimitiveView {
 
     static var size: Int? { 1 }
 
-    func buildNode(_ node: Node) {
+    func buildNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.control = TextFieldControl(placeholder: placeholder ?? "", placeholderColor: placeholderColor, action: action)
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.view = self
         (node.control as! TextFieldControl).action = action

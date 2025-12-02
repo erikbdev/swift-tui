@@ -4,7 +4,7 @@ import AppKit
 #endif
 
 public class Application {
-    private let node: Node
+    private let node: AnyViewNode
     private let window: Window
     private let control: Control
     private let renderer: Renderer
@@ -13,13 +13,13 @@ public class Application {
 
     private var arrowKeyParser = ArrowKeyParser()
 
-    private var invalidatedNodes: [Node] = []
+    private var invalidatedNodes: [AnyViewNode] = []
     private var updateScheduled = false
 
     public init<I: View>(rootView: I, runLoopType: RunLoopType = .dispatch) {
         self.runLoopType = runLoopType
 
-        node = Node(view: VStack(content: rootView).view)
+        node = ViewNode(view: VStack(content: rootView))
         node.build()
 
         control = node.control!
@@ -133,14 +133,14 @@ public class Application {
         }
     }
 
-    func invalidateNode(_ node: Node) {
+    func invalidateNode(_ node: AnyViewNode) {
         invalidatedNodes.append(node)
         scheduleUpdate()
     }
 
     func scheduleUpdate() {
         if !updateScheduled {
-            DispatchQueue.main.async { self.update() }
+            self.update()
             updateScheduled = true
         }
     }
@@ -149,7 +149,7 @@ public class Application {
         updateScheduled = false
 
         for node in invalidatedNodes {
-            node.update(using: node.view)
+            node.invalidate()
         }
         invalidatedNodes = []
 
@@ -188,5 +188,4 @@ public class Application {
         tattr.c_lflag |= tcflag_t(ECHO | ICANON)
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
     }
-
 }

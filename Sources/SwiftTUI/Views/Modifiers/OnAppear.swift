@@ -1,27 +1,27 @@
 import Foundation
 
 public extension View {
-    func onAppear(_ action: @escaping () -> Void) -> some View {
+    nonisolated func onAppear(_ action: (() -> Void)? = nil) -> some View {
         return OnAppear(content: self, action: action)
     }
 }
 
 private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
-    let action: () -> Void
+    let action: (() -> Void)?
 
     static var size: Int? { Content.size }
 
-    func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(view: content.view))
+    func buildNode(_ node: ViewNode<Self>) {
+        node.addNode(at: 0, ViewNode(view: content))
     }
 
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         node.view = self
-        node.children[0].update(using: content.view)
+        node.children[0].update(using: content)
     }
 
-    func passControl(_ control: Control, node: Node) -> Control {
+    func passControl(_ control: Control, node: ViewNode<Self>) -> Control {
         if let onAppearControl = control.parent { return onAppearControl }
         let onAppearControl = OnAppearControl(action: action)
         onAppearControl.addSubview(control, at: 0)
@@ -29,10 +29,10 @@ private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
     }
 
     private class OnAppearControl: Control {
-        var action: () -> Void
+        let action: (() -> Void)?
         var didAppear = false
 
-        init(action: @escaping () -> Void) {
+        init(action: (() -> Void)?) {
             self.action = action
         }
 
@@ -45,7 +45,9 @@ private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
             children[0].layout(size: size)
             if !didAppear {
                 didAppear = true
-                DispatchQueue.main.async { [action] in action() }
+                if let action {
+                    action()
+                }
             }
         }
     }

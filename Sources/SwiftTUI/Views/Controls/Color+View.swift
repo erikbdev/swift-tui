@@ -3,12 +3,12 @@ import Foundation
 extension Color: View, PrimitiveView {
     static var size: Int? { 1 }
     
-    func buildNode(_ node: Node) {
+    func buildNode(_ node: ViewNode<Self>) {
         node.control = ColorControl(color: self)
     }
     
-    func updateNode(_ node: Node) {
-        let last = node.view as! Self
+    func updateNode(_ node: ViewNode<Self>) {
+        let last = node.view
         node.view = self
         if self != last {
             let control = node.control as! ColorControl

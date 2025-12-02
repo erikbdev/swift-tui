@@ -3,6 +3,40 @@ import Foundation
 import Combine
 #endif
 
+protocol AnyViewNode: AnyObject {
+    var parent: AnyViewNode? { get set }
+    var children: [AnyViewNode] { get }
+    var application: Application? { get set }
+    var control: Control? { get set }
+
+    var size: Int { get }
+    var offset: Int  { get }
+    var index: Int { get set }
+
+    var state: [String: Any] { get set }
+    var environment: ((inout EnvironmentValues) -> Void)? { get set }
+
+    func control(at offset: Int) -> Control
+    func build()
+    func invalidate()
+}
+
+extension AnyViewNode {
+    var root: AnyViewNode { parent?.root ?? self }
+}
+
+extension AnyViewNode {
+    func update<T: View>(using view: T) {
+        build()
+
+        guard let node = self as? ViewNode<T> else {
+            log("AnyViewNode or cast not accurate. Expected: \(ViewNode<T>.self), got: \(Self.self)")
+            return
+        }
+        view.updateNode(node)
+    }
+}
+
 /// The node of a view graph.
 ///
 /// The view graph is the runtime representation of the views in an application.
@@ -14,8 +48,8 @@ import Combine
 ///
 /// Note that the control tree more closely resembles the layout hierarchy,
 /// because structural views (ForEach, etc.) have their own node.
-final class Node {
-    var view: GenericView
+final class ViewNode<T: View>: AnyViewNode {
+    var view: T
 
     var state: [String: Any] = [:]
     var environment: ((inout EnvironmentValues) -> Void)?
@@ -29,34 +63,31 @@ final class Node {
     /// For modifiers only, references to the controls
     var controls: WeakSet<Control>?
 
-    private(set) weak var parent: Node?
-    private(set) var children: [Node] = []
-
-    private(set) var index: Int = 0
+    weak var parent: AnyViewNode?
+    var children: [AnyViewNode] = []
+    var index: Int = 0
 
     private(set) var built = false
 
-    init(view: GenericView) {
+    init(view: T) {
         self.view = view
     }
 
-    func update(using view: GenericView) {
+    func invalidate() {
         build()
         view.updateNode(self)
     }
 
-    var root: Node { parent?.root ?? self }
-
     /// The total number of controls in the node.
     /// The node does not need to be fully built for the size to be computed.
     var size: Int {
-        if let size = type(of: view).size { return size }
+        if let size = T.size { return size }
         build()
         return children.map(\.size).reduce(0, +)
     }
 
     /// The number of controls in the parent node _before_ the current node.
-    private var offset: Int {
+    var offset: Int {
         var offset = 0
         for i in 0 ..< index {
             offset += parent?.children[i].size ?? 0
@@ -68,19 +99,22 @@ final class Node {
         if !built {
             self.view.buildNode(self)
             built = true
-            if !(view is OptionalView), let container = view as? LayoutRootView {
-                container.loadData(node: self)
+            if !(view is OptionalView), let container = view as? (any LayoutRootView) {
+                func _loadData<L: LayoutRootView>(_ container: L) {
+                    container.loadData(node: unsafeDowncast(self, to: ViewNode<L>.self))
+                }
+                _loadData(container)
             }
         }
     }
 
     // MARK: - Changing nodes
 
-    func addNode(at index: Int, _ node: Node) {
+    func addNode<S>(at index: Int, _ node: ViewNode<S>) {
         guard node.parent == nil else { fatalError("Node is already in tree") }
         children.insert(node, at: index)
         node.parent = self
-        for i in index ..< children.count {
+        for i in index..<children.count {
             children[i].index = i
         }
         if built {
@@ -113,8 +147,11 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if !(view is OptionalView), let modifier = self.view as? ModifierView {
-                    return modifier.passControl(control, node: self)
+                if !(view is OptionalView), let modifier = self.view as? any ModifierView {
+                    func _passControl<M: ModifierView>(_ modifier: M) -> Control {
+                        modifier.passControl(control, node: unsafeDowncast(self, to: ViewNode<M>.self))
+                    }
+                    return _passControl(modifier)
                 }
                 return control
             }
@@ -125,19 +162,30 @@ final class Node {
 
     // MARK: - Container changes
 
-    private func insertControl(at offset: Int) {
-        if !(view is OptionalView), let container = view as? LayoutRootView {
-            container.insertControl(at: offset, node: self)
-            return
+    fileprivate func insertControl(at offset: Int) {
+        if !(view is OptionalView), let container = view as? any LayoutRootView {
+            func _insertControl<L: LayoutRootView>(_ container: L) {
+                container.insertControl(at: offset, node: unsafeDowncast(self, to: ViewNode<L>.self))
+            }
+            return _insertControl(container)
         }
-        parent?.insertControl(at: offset + self.offset)
+
+        (parent as? _NodeLayoutRootView)?.removeControl(at: offset + self.offset)
     }
 
-    private func removeControl(at offset: Int) {
-        if !(view is OptionalView), let container = view as? LayoutRootView {
-            container.removeControl(at: offset, node: self)
-            return
+    fileprivate func removeControl(at offset: Int) {
+        if !(view is OptionalView), let container = view as? any LayoutRootView {
+             func _removeControl<L: LayoutRootView>(_ container: L) {
+                container.removeControl(at: offset, node: unsafeDowncast(self, to: ViewNode<L>.self))
+            }
+            _removeControl(container)
         }
-        parent?.removeControl(at: offset + self.offset)
+        (parent as? _NodeLayoutRootView)?.removeControl(at: offset + self.offset)
     }
 }
+
+private protocol _NodeLayoutRootView {
+    func removeControl(at offset: Int)
+}
+
+extension ViewNode: _NodeLayoutRootView where T: LayoutRootView {}

@@ -25,7 +25,7 @@ public struct Text: View, PrimitiveView {
     
     static var size: Int? { 1 }
     
-    func buildNode(_ node: Node) {
+    func buildNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.control = TextControl(
             text: text,
@@ -38,7 +38,7 @@ public struct Text: View, PrimitiveView {
         )
     }
     
-    func updateNode(_ node: Node) {
+    func updateNode(_ node: ViewNode<Self>) {
         setupEnvironmentProperties(node: node)
         node.view = self
         let control = node.control as! TextControl

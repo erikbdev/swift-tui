@@ -1,7 +1,8 @@
 import Foundation
 
 extension View {
-    func setupStateProperties(node: Node) {
+    func setupStateProperties(node: ViewNode<Self>) {
+        // TODO: Use reflection API
         for (label, value) in Mirror(reflecting: self).children {
             if let stateValue = value as? AnyState {
                 // Note: this is not how SwiftUI handles state.
