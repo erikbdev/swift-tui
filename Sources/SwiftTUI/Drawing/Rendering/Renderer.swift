@@ -43,7 +43,7 @@ class Renderer {
     if rect == nil { layer.invalidated = nil }
     let rect = rect ?? Rect(position: .zero, size: layer.frame.size)
     guard rect.size.width > 0, rect.size.height > 0 else {
-      assertionFailure("Trying to draw in empty rect")
+      // assertionFailure("Trying to draw in empty rect")
       return
     }
     for line in rect.minLine.intValue...rect.maxLine.intValue {

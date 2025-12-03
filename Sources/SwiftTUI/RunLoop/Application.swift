@@ -44,8 +44,6 @@ public class Application: @unchecked Sendable {
 
     node.application = self
     renderer.application = self
-
-    log("is regular Std? \(readFromStd)")
   }
 
   var stdInSource: DispatchSourceRead?
@@ -72,7 +70,7 @@ public class Application: @unchecked Sendable {
 
       let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
       stdInSource.setEventHandler(qos: .default, flags: []) { [weak self] in
-        self?.handleInput(FileHandle.standardInput.availableData)
+        self?.handleInput(String(data: FileHandle.standardInput.availableData, encoding: .utf8) ?? "")
       }
       stdInSource.resume()
       self.stdInSource = stdInSource
@@ -105,14 +103,6 @@ public class Application: @unchecked Sendable {
     #else
       dispatchMain()
     #endif
-  }
-
-  public func handleInput(_ data: Data) {
-    guard let string = String(data: data, encoding: .utf8) else {
-      return
-    }
-
-    handleInput(string)
   }
 
   public func handleInput(_ string: String) {
