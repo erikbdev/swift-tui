@@ -44,6 +44,8 @@ public class Application: @unchecked Sendable {
 
     node.application = self
     renderer.application = self
+
+    log("is regular Std? \(readFromStd)")
   }
 
   var stdInSource: DispatchSourceRead?
@@ -65,6 +67,9 @@ public class Application: @unchecked Sendable {
     if readFromStd {
       setInputMode()
       updateWindowSize()
+      control.layout(size: window.layer.frame.size)
+      renderer.draw()
+
       let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
       stdInSource.setEventHandler(qos: .default, flags: []) { [weak self] in
         self?.handleInput(FileHandle.standardInput.availableData)
@@ -84,13 +89,13 @@ public class Application: @unchecked Sendable {
         self?.stop()
       }
       sigIntSource.resume()
+    } else {
+      control.layout(size: window.layer.frame.size)
+      renderer.draw()
     }
 
-    control.layout(size: window.layer.frame.size)
-    renderer.draw()
-
     #if os(macOS)
-      switch runLoopType {
+      switch Application.runLoopType {
       case .dispatch:
         dispatchMain()
       case .cocoa:

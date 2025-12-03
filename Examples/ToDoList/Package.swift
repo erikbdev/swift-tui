@@ -8,12 +8,14 @@ let package = Package(
         .macOS(.v11)
     ],
     dependencies: [
-        .package(path: "../../")
+        .package(name: "SwiftTUI", path: "../../")
     ],
     targets: [
         .executableTarget(
             name: "ToDoList",
-            dependencies: ["SwiftTUI"]),
+            dependencies: ["SwiftTUI"], 
+            path: "Sources"
+        ),
         .testTarget(
             name: "ToDoListTests",
             dependencies: ["ToDoList"]),
