@@ -88,10 +88,6 @@ public class Application: @unchecked Sendable {
         self?.stop()
       }
       sigIntSource?.resume()
-    } else {
-      control.layout(size: window.layer.frame.size)
-      renderer.draw()
-    }
 
     #if os(macOS)
       switch Application.runLoopType {
@@ -104,6 +100,10 @@ public class Application: @unchecked Sendable {
     #else
       dispatchMain()
     #endif
+    } else {
+      control.layout(size: window.layer.frame.size)
+      renderer.draw()
+    }
   }
 
   public func handleInput(_ string: String) {
