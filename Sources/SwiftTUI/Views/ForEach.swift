@@ -15,7 +15,6 @@ public struct ForEach<Data, ID, Content>: View, PrimitiveView where Data: Random
     self.data = data
     self.id = id
     self.content = content
-
   }
 
   static var size: Int? { nil }

@@ -24,15 +24,12 @@ public struct Environment<T>: AnyEnvironment, DynamicProperty, PrimitiveDynamicP
   var valueReference = EnvironmentReference()
 
   public var wrappedValue: T {
-    get {
-      guard let node = valueReference.node else {
-        assertionFailure("Attempting to access @Environment variable before view is instantiated")
-        return EnvironmentValues()[keyPath: keyPath]
-      }
-      let environmentValues = makeEnvironment(node: node, transform: { _ in })
-      return environmentValues[keyPath: self.keyPath]
+    guard let node = valueReference.node else {
+      log("Attempting to access @Environment variable before view is instantiated")
+      return EnvironmentValues()[keyPath: keyPath]
     }
-    set {}
+    let environmentValues = makeEnvironment(node: node, transform: { _ in })
+    return environmentValues[keyPath: self.keyPath]
   }
 
   private func makeEnvironment(node: AnyNode, transform: (inout EnvironmentValues) -> Void) -> EnvironmentValues {

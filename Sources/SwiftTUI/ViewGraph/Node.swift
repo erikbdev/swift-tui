@@ -52,6 +52,8 @@ extension AnyNode {
 final class Node<T: View>: AnyNode {
   var view: T
 
+  // TODO: Use Reflection API
+  var properties: [Int: Any] = [:]
   var state: [String: Any] = [:]
   var environment: ((inout EnvironmentValues) -> Void)?
   #if os(macOS)
@@ -187,6 +189,7 @@ final class Node<T: View>: AnyNode {
     (parent as? _NodeLayoutRootView)?.removeControl(at: offset + self.offset)
   }
 }
+
 
 private protocol _NodeLayoutRootView {
   func insertControl(at offset: Int)

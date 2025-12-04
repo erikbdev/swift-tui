@@ -36,30 +36,25 @@ extension View {
 
 extension View {
   func buildNode(_ node: Node<Self>) {
+    self.setupDynamicProperties(node: node)
     if let primitive = self as? (any PrimitiveView) {
       func _buildNode<T: PrimitiveView>(_ view: T) {
         view.buildNode(unsafeDowncast(node, to: Node<T>.self))
       }
       _buildNode(primitive)
     } else {
-      self.setupStateProperties(node: node)
-      self.setupEnvironmentProperties(node: node)
-      #if os(macOS)
-        self.setupObservedObjectProperties(node: node)
-      #endif
       node.addNode(at: 0, Node(view: self.body))
     }
   }
 
   func updateNode(_ node: Node<Self>) {
+    self.setupDynamicProperties(node: node)
     if let primitive = self as? (any PrimitiveView) {
       func _updateNode<T: PrimitiveView>(_ view: T) {
         view.updateNode(unsafeDowncast(node, to: Node<T>.self))
       }
       _updateNode(primitive)
     } else {
-      self.setupStateProperties(node: node)
-      self.setupEnvironmentProperties(node: node)
       node.view = self
       node.children[0].update(using: self.body)
     }
