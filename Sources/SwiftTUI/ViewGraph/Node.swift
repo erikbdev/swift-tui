@@ -184,7 +184,7 @@ final class Node<T: View>: AnyNode {
       func _removeControl<L: LayoutRootView>(_ container: L) {
         container.removeControl(at: offset, node: unsafeDowncast(self, to: Node<L>.self))
       }
-      _removeControl(container)
+      return _removeControl(container)
     }
     (parent as? _NodeLayoutRootView)?.removeControl(at: offset + self.offset)
   }

@@ -47,6 +47,8 @@ public class Application: @unchecked Sendable {
   }
 
   var stdInSource: DispatchSourceRead?
+  var sigWinChSource: DispatchSourceSignal?
+  var sigIntSource: DispatchSourceSignal?
 
   #if os(macOS)
     public nonisolated(unsafe) static var runLoopType = RunLoopType.dispatch
@@ -68,25 +70,24 @@ public class Application: @unchecked Sendable {
       control.layout(size: window.layer.frame.size)
       renderer.draw()
 
-      let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
-      stdInSource.setEventHandler(qos: .default, flags: []) { [weak self] in
+      stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
+      stdInSource?.setEventHandler { [weak self] in
         self?.handleInput(String(data: FileHandle.standardInput.availableData, encoding: .utf8) ?? "")
       }
-      stdInSource.resume()
-      self.stdInSource = stdInSource
+      stdInSource?.resume()
 
-      let sigWinChSource = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
-      sigWinChSource.setEventHandler(qos: .default, flags: []) { [weak self] in
+      sigWinChSource = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
+      sigWinChSource?.setEventHandler { [weak self] in
         self?.handleWindowSizeChange()
       }
-      sigWinChSource.resume()
+      sigWinChSource?.resume()
 
       signal(SIGINT, SIG_IGN)
-      let sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
-      sigIntSource.setEventHandler(qos: .default, flags: []) { [weak self] in
+      sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+      sigIntSource?.setEventHandler { [weak self] in
         self?.stop()
       }
-      sigIntSource.resume()
+      sigIntSource?.resume()
     } else {
       control.layout(size: window.layer.frame.size)
       renderer.draw()
@@ -149,22 +150,20 @@ public class Application: @unchecked Sendable {
   }
 
   func scheduleUpdate() {
-    // if !updateScheduled {
-      self.update()
-      // updateScheduled = true
-    // }
+    guard !updateScheduled else { return }
+    updateScheduled = true
+    self.update()
   }
 
   private func update() {
-    // updateScheduled = false
-
     for node in invalidatedNodes {
       node.invalidate()
     }
-    invalidatedNodes = []
+    invalidatedNodes.removeAll(keepingCapacity: true)
 
     control.layout(size: window.layer.frame.size)
     renderer.update()
+    updateScheduled = false
   }
 
   public func stop() {
