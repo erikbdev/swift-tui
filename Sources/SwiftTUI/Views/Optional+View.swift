@@ -25,7 +25,6 @@ extension Optional: View, PrimitiveView, OptionalView where Wrapped: View {
     case (.some, .none):
       node.removeNode(at: 0)
     case (.some, .some(let newValue)):
-      break
       node.children[0].update(using: newValue)
     }
   }

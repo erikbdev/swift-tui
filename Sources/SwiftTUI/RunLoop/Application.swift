@@ -149,14 +149,14 @@ public class Application: @unchecked Sendable {
   }
 
   func scheduleUpdate() {
-    if !updateScheduled {
+    // if !updateScheduled {
       self.update()
-      updateScheduled = true
-    }
+      // updateScheduled = true
+    // }
   }
 
   private func update() {
-    updateScheduled = false
+    // updateScheduled = false
 
     for node in invalidatedNodes {
       node.invalidate()
@@ -166,7 +166,6 @@ public class Application: @unchecked Sendable {
     control.layout(size: window.layer.frame.size)
     renderer.update()
   }
-
 
   public func stop() {
     renderer.stop()
@@ -200,7 +199,7 @@ public class Application: @unchecked Sendable {
     guard ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size) == 0,
       size.ws_col > 0, size.ws_row > 0
     else {
-      assertionFailure("Could not get window size")
+      log("Could not get window size")
       return
     }
     window.layer.frame.size = Size(width: Extended(Int(size.ws_col)), height: Extended(Int(size.ws_row)))

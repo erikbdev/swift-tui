@@ -112,7 +112,10 @@ final class Node<T: View>: AnyNode {
   // MARK: - Changing nodes
 
   func addNode<S>(at index: Int, _ node: Node<S>) {
-    guard node.parent == nil else { fatalError("Node is already in tree") }
+    guard node.parent == nil else { 
+      log("Node is already in tree"); 
+      return 
+    }
     children.insert(node, at: index)
     node.parent = self
     for i in index..<children.count {
@@ -171,7 +174,7 @@ final class Node<T: View>: AnyNode {
       return _insertControl(container)
     }
 
-    (parent as? _NodeLayoutRootView)?.removeControl(at: offset + self.offset)
+    (parent as? _NodeLayoutRootView)?.insertControl(at: offset + self.offset)
   }
 
   fileprivate func removeControl(at offset: Int) {
@@ -186,6 +189,7 @@ final class Node<T: View>: AnyNode {
 }
 
 private protocol _NodeLayoutRootView {
+  func insertControl(at offset: Int)
   func removeControl(at offset: Int)
 }
 

@@ -27,11 +27,9 @@ public struct _ConditionalView<TrueContent: View, FalseContent: View>: View, Pri
     node.view = self
     switch (last.content, self.content) {
     case (.a, .a(let newValue)):
-      break
       node.children[0].update(using: newValue)
     case (.b, .b(let newValue)):
       node.children[0].update(using: newValue)
-      break
     case (.b, .a(let newValue)):
       node.removeNode(at: 0)
       node.addNode(at: 0, Node(view: newValue))

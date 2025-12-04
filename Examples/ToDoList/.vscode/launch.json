@@ -7,9 +7,9 @@
     {
       "type": "swift",
       "request": "launch",
-      "name": "Launch and Debug ToDoList",
-      "program": "${workspaceRoot}/Examples/ToDoList/.build/debug/ToDoList",
-      "cwd": "${workspaceRoot}/Examples/ToDoList",
+      "name": "Launch Swift Executable",
+      "program": "${workspaceRoot}/.build/debug/ToDoList",
+      "cwd": "${workspaceRoot}",
       "runInTerminal": true,
       "preLaunchTask": "swift: Build All"
     },
